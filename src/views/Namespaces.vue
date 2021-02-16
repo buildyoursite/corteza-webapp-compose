@@ -25,25 +25,32 @@
             </h1>
           </b-col>
         </b-row>
+        <div v-if="canCreateNamespace">
+          <b-button size="lg"
+                    :to="{ name: 'namespace.create' }"
+                    variant="primary"
+          >
+            {{ $t('namespace.create') }}
+          </b-button>
+        </div>
 
         <b-row>
           <div class="col-md-6 col-lg-4 col-12 mt-4" v-for="(n) in namespaces" :key="n.namespaceID">
-            <div v-if="n.enabled">
-              <router-link :to="{ name: 'pages', params: { slug: (n.slug || n.namespaceID) } }">
-                <namespace-item :namespace="n" />
-              </router-link>
+            <div v-if="n.enabled" class="h-100">
+              <namespace-item :namespace="n">
+                <b-button variant="primary"
+                          :to="{ name: 'pages', params: { slug: (n.slug || n.namespaceID) } }"
+                          class="float-right"
+                >
+                  {{ $t('namespace.clickOpen') }}
+                </b-button>
+              </namespace-item>
             </div>
-            <namespace-item v-else :namespace="n" />
-          </div>
-          <div v-if="canCreateNamespace" class="add-wrap col-md-6 col-lg-4 col-12 mt-4">
-            <router-link :to="{ name: 'namespace.create' }">
-              <div class="add-namespace">
-                <span class="add-icon">+</span>
-                <label class="add-text text-center d-block">
-                    {{ $t('namespace.create') }}
-                </label>
-              </div>
-            </router-link>
+            <namespace-item v-else :namespace="n">
+              <span class="text-muted ml-5">
+                {{ $t('namespace.disabled') }}
+              </span>
+            </namespace-item>
           </div>
         </b-row>
       </b-container>
